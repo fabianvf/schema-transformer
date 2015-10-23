@@ -1,6 +1,6 @@
 from setuptools import setup
 
-VERSION = '0.0.2'
+VERSION = '0.0.3'
 
 install_reqs = [
     'jsonpointer',
@@ -12,7 +12,7 @@ setup(
     name='schema-transformer',
     packages=['schema_transformer'],
     version=VERSION,
-    description='',
+    description='A library for doing schema transformations',
     author='Fabian von Feilitzsch',
     author_email='fabian@cos.io',
     url='https://github.com/fabianvf/schema-transformer',
