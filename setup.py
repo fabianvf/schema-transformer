@@ -9,7 +9,7 @@ install_reqs = [
 ]
 
 setup(
-    name='schema_transformer',
+    name='schema-transformer',
     packages=['schema_transformer'],
     version=VERSION,
     description='',
