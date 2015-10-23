@@ -89,7 +89,8 @@ class BaseTransformer(object):
 @six.add_metaclass(abc.ABCMeta)
 class XMLTransformer(BaseTransformer):
 
-    namespaces = {}
+    def __init__(self, namespaces=None):
+        self.namespaces = namespaces or {}
 
     def _transform_string(self, string, doc):
         return doc.xpath(string, namespaces=self.namespaces)
@@ -111,5 +112,8 @@ class JSONTransformer(BaseTransformer):
 @six.add_metaclass(abc.ABCMeta)
 class CSVTransformer(BaseTransformer):
 
+    def __init__(self, keys):
+        self.keys = dict((val, key) for key, val in enumerate(keys))
+
     def _transform_string(self, val, doc):
-        raise NotImplementedError
+        return doc[self.keys[val]]
