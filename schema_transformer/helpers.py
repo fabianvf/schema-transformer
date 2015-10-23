@@ -2,6 +2,20 @@ import functools
 from copy import deepcopy
 
 
+def CONSTANT(x):
+    ''' Takes a value, returns a function that always returns that value
+        Useful inside schemas for defining constants
+
+        >>> CONSTANT(7)('my', 'name', verb='is')
+        7
+        >>> CONSTANT([123, 456])()
+        [123, 456]
+    '''
+    def inner(*y, **z):
+        return x
+    return inner
+
+
 def compose(*functions):
     ''' evaluates functions from right to left.
 

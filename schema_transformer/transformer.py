@@ -2,25 +2,35 @@ from __future__ import unicode_literals
 
 import six
 import abc
+import json
 import logging
 
 from jsonpointer import resolve_pointer, JsonPointerException
 
 logger = logging.getLogger(__name__)
 
+try:
+    from lxml import etree
+except ImportError:
+    logger.info('You will need to install lxml to use the XML transformer')
+
 
 @six.add_metaclass(abc.ABCMeta)
 class BaseTransformer(object):
+
+    def __init__(self, schema):
+        self.schema = schema
 
     @abc.abstractmethod
     def _transform_string(self, string, doc):
         raise NotImplementedError
 
-    @abc.abstractproperty
-    def schema(self):
+    @abc.abstractmethod
+    def load(self, doc):
         raise NotImplementedError
 
-    def transform(self, doc, fail=False):
+    def transform(self, doc, fail=False, load=True):
+        doc = self.load(doc) if load else doc
         return self._transform_dict(self.schema, doc, fail=fail)
 
     def _transform_dict(self, d, doc, fail=False):
@@ -89,8 +99,12 @@ class BaseTransformer(object):
 @six.add_metaclass(abc.ABCMeta)
 class XMLTransformer(BaseTransformer):
 
-    def __init__(self, namespaces=None):
+    def __init__(self, schema, namespaces=None):
+        BaseTransformer.__init__(self, schema)
         self.namespaces = namespaces or {}
+
+    def load(self, doc):
+        return etree.XML(doc)
 
     def _transform_string(self, string, doc):
         return doc.xpath(string, namespaces=self.namespaces)
@@ -98,6 +112,9 @@ class XMLTransformer(BaseTransformer):
 
 @six.add_metaclass(abc.ABCMeta)
 class JSONTransformer(BaseTransformer):
+
+    def load(self, doc):
+        return json.loads(doc)
 
     def _transform_string(self, val, doc):
         try:
@@ -112,8 +129,12 @@ class JSONTransformer(BaseTransformer):
 @six.add_metaclass(abc.ABCMeta)
 class CSVTransformer(BaseTransformer):
 
-    def __init__(self, keys):
+    def __init__(self, schema, keys):
+        BaseTransformer.__init__(self, schema)
         self.keys = dict((val, key) for key, val in enumerate(keys))
+
+    def load(self, doc):
+        raise NotImplementedError
 
     def _transform_string(self, val, doc):
         return doc[self.keys[val]]
