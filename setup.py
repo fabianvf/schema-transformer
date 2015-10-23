@@ -2,7 +2,12 @@ from setuptools import setup
 
 VERSION = '0.0.0'
 
-install_reqs = []
+install_reqs = [
+    'jsonpointer',
+    'jsonschema',
+    'six'
+]
+
 setup(
     name='schema_transformer',
     packages=['schema_transformer'],
