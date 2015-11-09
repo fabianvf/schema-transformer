@@ -13,36 +13,37 @@ This module provides a declarative way to map data from an arbitrary XML, JSON, 
 Some pieces of the language are dependent on the type of transformer, but in general the language has the following grammar:
 ```
 schema :: map[key -> value]
-```
-At its core, the schema is just a mapping from keys to values
-```
+
 key :: JSON_key_string
-```
-a key is simply a valid JSON key string
-```
+
 value :: primitive | (primitive, primitive, ... , post_func) | ((args, kwargs), post_func) | schema
-```
-a value can be a primitive value, a tuple of primitive values with a post processing function at the end, a tuple of unnamed and named arguments with a function that will take those arguments, or a nested schema
-```
+
 args :: (primitive, ... , primitive)
-```
-args can be a tuple of primitive values
-```
+
 kwargs :: map[name -> primitive]
-```
-kwargs can be a mapping of named arguments (keys) to primitive values
-```
+
 primitive :: string | pre_func
-```
-a primitive can either be a string (used by individual transformers to find data), or a pre_func.
-```
+
 pre_func :: function[raw_metadata -> Any]
-```
-a function that takes a raw metadata document and does some processing on that document. The return type of the function is not tracked, but the return value will eventually be fed to a post_func
-```
+
 post_func :: function[(Any, ..., Any) -> JSON_value]
 ```
-a function that takes the results of processing the preceding primitives (either (args, kwargs) or the tuple of primitives) and maps them to the single value that is the actual intended value for the given key.'
+
+schema: At its core, the schema is just a mapping from keys to values
+
+key: a key is simply a valid JSON string that can be a key
+
+value: a value can be a primitive value, a tuple of primitive values with a post processing function at the end, a tuple of unnamed and named arguments with a function that will take those arguments, or a nested schema
+
+args: args can be a tuple of primitive values
+
+kwargs: kwargs can be a mapping of named arguments (keys) to primitive values
+
+primitive: a primitive can either be a string (used by individual transformers to find data), or a pre_func.
+
+pre_func: a function that takes a raw metadata document and does some processing on that document. The return type of the function is not tracked, but the return value will eventually be fed to a post_func
+
+post_func: a function that takes the results of processing the preceding primitives (either (args, kwargs) or the tuple of primitives) and maps them to the single value that is the actual intended value for the given key.
 
 #### Strings ####
 
