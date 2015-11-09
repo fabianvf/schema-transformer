@@ -82,7 +82,24 @@ def transform_string(val, doc):
 If the pointer fails to resolve, the value defaults to the empty string.
 
 #### CSV Transformer ####
- TODO
+```
+string :: CSV Key
+```
+When the CSV transformer encounters a string, which should just correspond to one of the keys at the top of the CSV file, it simply grabs the element in the corresponding index of the document.
+For example, for a CSV with the following structure:
+```csv
+id, username, email, points
+```
+The string `"username"` would return the element at index `1` in the given document.
+
+```python
+def transform_string(val, doc):
+    try:
+        return doc[keys[val]]
+    except IndexError:
+        return None
+```
+Where keys is the list of keys at the top of the CSV file. Return `None` if no element is found.
 
 ## Usage
 
