@@ -112,7 +112,7 @@ transformer = JSONTransformer({
     'title': ('/name', lambda x: x.strip().capitalize()),
     'tags': ('/keywords', lambda x: x.split(';'))
 })
-sample = '{"name": "mathematics  ", "keywords": "math;physics;science"}"
+sample = '{"name": "mathematics  ", "keywords": "math;physics;science"}'
 
 transformer.transform(sample)
 # {'title': 'Mathematics', 'tags': ['math', 'physics', 'science']}
