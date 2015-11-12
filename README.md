@@ -108,6 +108,14 @@ from schema_transformer.transformers import XMLTransformer
 ### JSONTransformer
 ```python
 from schema_transformer.transformers import JSONTransformer
+transformer = JSONTransformer({
+    'title': ('/name', lambda x: x.strip().capitalize()),
+    'tags': ('/keywords', lambda x: x.split(';'))
+})
+sample = '{"name": "mathematics  ", "keywords": "math;physics;science"}"
+
+transformer.transform(sample)
+# {'title': 'Mathematics', 'tags': ['math', 'physics', 'science']}
 ```
 ### CSVTransformer
 The CSV transformer is initialized with a list of keys, where the position of each key in the list indicates which element it is in the CSV document. This allows you to write the schemas using the textual keys, rather than the index numbers.
