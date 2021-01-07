@@ -1,6 +1,6 @@
 -r requirements.txt
 
 pytest==2.8.2
-lxml==3.4.4
+lxml==4.6.2
 flake8==2.4.1
 pytest-cov==2.2.0
